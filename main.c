@@ -5,6 +5,7 @@
 bool search_document(char filename[], char query[]){
     FILE *fp = fopen(filename, "r");
     if (fp == NULL){
+        printf("\nFile where?");
         return false;
     }
 
@@ -26,8 +27,19 @@ bool search_document(char filename[], char query[]){
     return false;
 }
 
+void search_engine(char *documents[], char query[], int doc_count){
+    for(int i = 0; i < doc_count; ++i){
+        if (search_document(documents[i], query)){
+            printf("-%s\n", documents[i]);
+        }
+    }
+}
 int main(){
-    assert(search_document("hello.txt", "no"));
+    char *documents[5] = {"/home/shermyn/document-search-engine/files/eh.txt", 
+        "/home/shermyn/document-search-engine/files/hello.txt", 
+        "/home/shermyn/document-search-engine/files/what.txt"};
+    
+    search_engine(documents, "no", 3);
     
 }
 
