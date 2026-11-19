@@ -29,4 +29,7 @@ typedef struct{
 /// @return true for success, false if parameters are null or entries or documents is full
 bool insert_word(const char *word, Hashtable *h, const char *filename);
 
+/// @brief prints the hashtable
+/// @param h 
+void print_index(const Hashtable *h);
 #endif
