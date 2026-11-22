@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <dirent.h>
 
 // TODO: Modularize hashing, finding existing entries, creating new entry, etc..
 
@@ -180,10 +181,23 @@ bool index_document(Hashtable *h, const char *filename){
 }
 
 bool index_documents(Hashtable *h, const char *filenames[], const int file_num){
+    if (h == NULL || filenames == NULL || file_num < 0){
+        return false;
+    }
+
     for(int i = 0; i < file_num; ++i){
-        if (index_document(h, filenames[i])){
+        if (!index_document(h, filenames[i])){
             return false;
         }
     }
     return true;
+}
+
+bool index_folder(Hashtable *h, const char *foldername){
+    DIR *dir = opendir(foldername);
+    if(dir == NULL){
+        return false;
+    }
+
+    
 }

@@ -46,13 +46,13 @@ bool search_index(const Hashtable *h, const char *word, IndexEntry *found_entry)
 /// @brief grabs words and adds the doc name to its index
 /// @param h 
 /// @param filename 
-/// @return true for success, false for null paramaters,  
+/// @return true for success, false for null args, cannot find file, or invalid word insert   
 bool index_document(Hashtable *h, const char *filename);
 
 /// @brief does index_document but for multiple documents
 /// @param h 
 /// @param filenames 
 /// @param file_num 
-/// @return 
+/// @return true for success, false for null args, or invalid individual doc insert
 bool index_documents(Hashtable *h, const char *filenames[], const int file_num);
 #endif
