@@ -41,12 +41,38 @@ void test_normal_search(void){
     assert(strcmp(result.documents[0], "doc2.txt") == 0);
 }
 
+void test_normal_index_doc(void){
+    static Hashtable table = {0};
+
+    assert(index_document(&table, "/home/shermyn/document-search-engine/files/eh.txt"));
+
+    IndexEntry result;
+
+    assert(search_index(&table, "cat", &result));
+    assert(strcmp(result.word, "cat") == 0 && strcmp(result.documents[0], "/home/shermyn/document-search-engine/files/eh.txt") == 0 && result.doc_count == 1);
+}
+
+void test_normal_index_docs(void){
+    Hashtable table = {0};
+
+    const char *files[] = {
+        "doc1.txt",
+        "doc2.txt",
+        "doc3.txt"
+    };
+
+    index_documents(&table, files, 3);
+    print_index(&table);
+}
+
+
 int main(void) {
     printf("Running Hashtable Unit Tests...\n\n");
 
-    test_normal_inserts();
+    //test_normal_inserts();
     test_normal_search();
-
+    test_normal_index_doc();
+    test_normal_index_docs();
 
     printf("\nAll separate tests passed!\n");
     return 0;

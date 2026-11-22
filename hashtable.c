@@ -149,3 +149,41 @@ bool search_index(const Hashtable *h, const char *word, IndexEntry *found_entry)
     return false;
 
 }
+
+bool index_document(Hashtable *h, const char *filename){
+    if (h == NULL || filename == NULL){
+        return false;
+    }
+
+    FILE *fp = fopen(filename, "r"); //puts a pointer in the beginner
+    if (fp == NULL){
+        return false;
+    }
+
+    char line[256];
+    const char *delimiters = ", \t\r\n";
+
+    while(fgets(line, sizeof(line), fp) != NULL){ //fgets puts line from fp into line and sizeoflline sets limit and if worked then address of line, else NULL
+        char *word = strtok(line, delimiters); //cuts everything else after the delimeter and leaves u w word b4 it
+        while(word != NULL){ //the null means to continue on where it left off (line above)
+            if (!insert_word(word, h, filename)){
+                fclose(fp);
+                return false;
+            }
+            word = strtok(NULL, delimiters);
+        }
+    }
+
+    fclose(fp);
+    return true;
+
+}
+
+bool index_documents(Hashtable *h, const char *filenames[], const int file_num){
+    for(int i = 0; i < file_num; ++i){
+        if (index_document(h, filenames[i])){
+            return false;
+        }
+    }
+    return true;
+}

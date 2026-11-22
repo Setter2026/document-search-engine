@@ -5,6 +5,8 @@
 #define ENTRIES_SIZE 100
 #define WORD_SIZE 50
 
+//TO DO: FIX THE COMMENTS
+
 //Stores the word, what documents have that word, and document count
 typedef struct{
     int doc_count;
@@ -41,4 +43,16 @@ void print_index(const Hashtable *h);
 /// @return true if found, false if not
 bool search_index(const Hashtable *h, const char *word, IndexEntry *found_entry);
 
+/// @brief grabs words and adds the doc name to its index
+/// @param h 
+/// @param filename 
+/// @return true for success, false for null paramaters,  
+bool index_document(Hashtable *h, const char *filename);
+
+/// @brief does index_document but for multiple documents
+/// @param h 
+/// @param filenames 
+/// @param file_num 
+/// @return 
+bool index_documents(Hashtable *h, const char *filenames[], const int file_num);
 #endif
