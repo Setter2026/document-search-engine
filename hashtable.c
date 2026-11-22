@@ -3,6 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
+// TODO: Modularize hashing, finding existing entries, creating new entry, etc..
+
 bool insert_word(const char *word, Hashtable *h, const char *filename){
     if (word == NULL || h == NULL || filename == NULL || strcmp(word, "") == 0){
         return false;
@@ -80,7 +82,7 @@ bool insert_word(const char *word, Hashtable *h, const char *filename){
     return true;
 }
 
-void print_index(Hashtable *h){
+void print_index(const Hashtable *h){
     if (h == NULL){
         return;
     }
@@ -99,3 +101,51 @@ void print_index(Hashtable *h){
     }
 }
 
+bool search_index(const Hashtable *h, const char *word, IndexEntry *found_entry){
+    if(h == NULL || word == NULL || found_entry == NULL){
+        return false;
+    }
+
+    char letter = word[0];
+    int i = 0;
+    int hash_code = 0;
+
+    char copy_word[50];
+
+    while(letter != '\0'){
+        if (isalpha(letter))
+        {
+            hash_code += (tolower(letter) - 'a') + 1;
+            copy_word[i] = tolower(letter);
+        }
+        else if (isdigit(letter))
+        {
+            hash_code += (letter - '0') + 27;
+            copy_word[i] = letter;
+        }
+
+        letter = word[++i];
+
+        if (i > 49){
+            return false;
+        }
+    }
+
+    copy_word[i] = '\0';
+
+    hash_code %= TABLE_SIZE;
+
+    Bucket *b = &h->buckets[hash_code];
+
+    for(int i = 0; i < b->entryCount; ++i){
+        IndexEntry e = b->entries[i];
+        if (strcmp(e.word, copy_word) == 0){
+            *found_entry = e;
+            return true;
+        }
+            
+    }
+
+    return false;
+
+}

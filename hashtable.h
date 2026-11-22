@@ -3,12 +3,13 @@
 
 #define TABLE_SIZE 100
 #define ENTRIES_SIZE 100
+#define WORD_SIZE 50
 
 //Stores the word, what documents have that word, and document count
 typedef struct{
     int doc_count;
     char documents[100][256]; 
-    char word[50];
+    char word[WORD_SIZE];
 }IndexEntry;
 
 //Stores the "minidrawers" of hashtables when multiple entries share the same spot in the index
@@ -32,4 +33,12 @@ bool insert_word(const char *word, Hashtable *h, const char *filename);
 /// @brief prints the hashtable
 /// @param h 
 void print_index(const Hashtable *h);
+
+/// @brief searches if word exist in index
+/// @param h 
+/// @param word 
+/// @param found_entry 
+/// @return true if found, false if not
+bool search_index(const Hashtable *h, const char *word, IndexEntry *found_entry);
+
 #endif

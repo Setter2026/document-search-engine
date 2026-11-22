@@ -1,1 +1,1 @@
-r
+ && table.buckets->entryCount == 1)
