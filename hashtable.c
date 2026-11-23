@@ -199,5 +199,26 @@ bool index_folder(Hashtable *h, const char *foldername){
         return false;
     }
 
-    
+    struct dirent *entry;
+    char line[256];
+
+    while((entry = readdir(dir)) != NULL){
+        if(strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0){
+            continue;
+        }
+
+        if (strstr(entry->d_name, ".txt") == NULL){
+            continue;
+        }
+
+       snprintf(line, sizeof(line), "%s/%s", foldername, entry->d_name);
+
+       if (!index_document(h, line)){
+            closedir(dir);
+            return false;
+       }
+    }
+
+    closedir(dir);
+    return true;
 }

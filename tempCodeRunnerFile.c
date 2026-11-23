@@ -1,3 +1,1 @@
-"doc1.txt",
-        "doc2.txt",
-        "doc3.txt"
+          printf("%s\n", entry->d_name);

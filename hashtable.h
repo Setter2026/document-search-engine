@@ -55,4 +55,10 @@ bool index_document(Hashtable *h, const char *filename);
 /// @param file_num 
 /// @return true for success, false for null args, or invalid individual doc insert
 bool index_documents(Hashtable *h, const char *filenames[], const int file_num);
+
+/// @brief Goes through folder and only accepts txt files
+/// @param h 
+/// @param foldername 
+/// @return true for success, false for null args, or insertion failure
+bool index_folder(Hashtable *h, const char *foldername);
 #endif

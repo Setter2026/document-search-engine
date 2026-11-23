@@ -78,6 +78,25 @@ void test_normal_index_docs(void){
     assert(result.doc_count == 2);
 }
 
+void test_normal_index_folder(void){
+    static Hashtable table = {0};
+
+    assert(index_folder(&table, "sample_files"));
+    
+    IndexEntry result;
+    assert(search_index(&table, "cat", &result));
+    assert(strcmp(result.word, "cat") == 0);
+    assert(result.doc_count == 2);
+
+    assert(search_index(&table, "dog", &result));
+    assert(strcmp(result.word, "dog") == 0);
+    assert(result.doc_count == 2);
+
+
+    assert(search_index(&table, "mouse", &result));
+    assert(strcmp(result.word, "mouse") == 0);
+    assert(result.doc_count == 2);
+}
 
 int main(void) {
     printf("Running Hashtable Unit Tests...\n\n");
@@ -86,6 +105,7 @@ int main(void) {
     test_normal_search();
     test_normal_index_doc();
     test_normal_index_docs();
+    test_normal_index_folder();
 
     printf("\nAll separate tests passed!\n");
     return 0;
