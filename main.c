@@ -4,22 +4,30 @@
 
 
 int main(int argc, char *argv[]) {
-    if (argc != 2){
-        printf("Invalid input\n");
-        return 1;
-    }
+
     printf("======================================\n");
     printf("      Document Search Engine\n");
     printf("======================================\n");
 
-    static Hashtable table = {0};
-    if(!index_folder(&table, argv[1])){
-        printf("Cannot index folder (perhaps invalid path?)");
+    char folderpath[256];
+    printf("Enter folder to index: ");
+    if (fgets(folderpath, sizeof(folderpath), stdin) == NULL)  {
+
+        printf("\nError reading input!\n");
         return 1;
     }
 
+    folderpath[strcspn(folderpath, "\n")] = '\0';
+    static Hashtable table = {0};
+
+    if(!index_folder(&table, folderpath)){
+        printf("\nCannot index folder (perhaps invalid path?)\n");
+        return 1;
+    }
+
+    
     char query[WORD_SIZE];
-    printf("Indexed '%s'. Type a word to search (or 'exit' to quit):\n", argv[1]);
+    printf("Indexed '%s'. Type a word to search (or 'exit' to quit):\n", folderpath);
 
     while (1) {
         printf("\nsearch> ");
@@ -34,9 +42,9 @@ int main(int argc, char *argv[]) {
             continue;
         }
 
-        printf("\n%s: ", result.word);
+        printf("\nResults for '%s' (%d documents)\n", result.word, result.doc_count);
         for(int i = 0; i < result.doc_count; ++i){
-            printf("%s ", result.record[i].filename);
+            printf("\n-%s (%d occurence)", result.record[i].filename, result.record[i].frequency);
         }
 
         printf("\n");

@@ -7,6 +7,7 @@
 #define FILENAME_SIZE 256
 #define RECORD_SIZE 100
 
+
 //TO DO: FIX THE COMMENTS
 
 //Store the file's name and how often the word shows up in doc
