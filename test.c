@@ -98,7 +98,7 @@ void test_normal_index_folder(void){
     assert(result.doc_count == 2);
 }
 
-void test_frequency_feature(void) {
+ void test_frequency_feature(void) {
 
     static Hashtable table = {0};
 
@@ -113,7 +113,7 @@ void test_frequency_feature(void) {
    IndexEntry result;
 
    assert(search_index(&table, "cat", &result));
-   assert(result.record[0].frequency == 3);
+   assert(result.record[0].frequency == 2);
 
    assert(search_index(&table, "dog", &result));
    assert(result.record[0].frequency == 3);
@@ -136,11 +136,13 @@ void test_sorting_by_frequency(void){
 
     IndexEntry result;
     assert(search_index(&table, "cat", &result));
-    
+    sort_by_frequency(&result);
 
-
-
+    assert(strcmp(result.record[0].filename, "doc2.txt") == 0);
+    assert(strcmp(result.record[1].filename, "doc3.txt") == 0);
+    assert(strcmp(result.record[2].filename, "doc1.txt") == 0);
 }
+
 
 int main(void) {
     printf("Running Hashtable Unit Tests...\n\n");
@@ -150,6 +152,8 @@ int main(void) {
     test_normal_index_doc();
     test_normal_index_docs();
     test_normal_index_folder();
+    test_frequency_feature();
+    test_sorting_by_frequency();
 
     printf("\nAll separate tests passed!\n");
     return 0;

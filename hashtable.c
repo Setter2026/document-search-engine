@@ -4,12 +4,11 @@
 #include <ctype.h>
 #include <dirent.h>
 
-// TODO: Modularize hashing, finding existing entries, creating new entry, etc..
-void sortByFrequency(IndexEntry *e){
-    
+void sort_by_frequency(IndexEntry *e){
     for(int i = 0; i < e->doc_count; ++i){
         int most_relevant = i;
-        for(int j = i+1; j < e->record->frequency; ++j){
+
+        for(int j = i+1; j < e->doc_count; ++j){
              if (e->record[most_relevant].frequency < e->record[j].frequency){
                 most_relevant = j;
              }
@@ -81,6 +80,7 @@ bool insert_word(const char *word, Hashtable *h, const char *filename){
                 }
                 ++b->entries[i].doc_count;
                 strcpy(b->entries[i].record[b->entries[i].doc_count - 1].filename, filename);
+                ++b->entries[i].record[b->entries[i].doc_count - 1].frequency;
                 break;
             }
         }
@@ -91,6 +91,7 @@ bool insert_word(const char *word, Hashtable *h, const char *filename){
         e.doc_count = 1;
         strcpy(e.word, copy_word);
         strcpy(e.record[0].filename, filename);
+        e.record[0].frequency = 1;
         
         ++b->entryCount;
         b->entries[b->entryCount - 1] = e; 
@@ -157,6 +158,7 @@ bool search_index(const Hashtable *h, const char *word, IndexEntry *found_entry)
         IndexEntry e = b->entries[i];
         if (strcmp(e.word, copy_word) == 0){
             *found_entry = e;
+            sort_by_frequency(found_entry);
             return true;
         }
             

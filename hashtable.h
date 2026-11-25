@@ -9,6 +9,7 @@
 
 //TO DO: FIX THE COMMENTS
 
+//Store the file's name and how often the word shows up in doc
 typedef struct{
     char filename[FILENAME_SIZE];
     int frequency;
@@ -68,4 +69,9 @@ bool index_documents(Hashtable *h, const char *filenames[], const int file_num);
 /// @param foldername 
 /// @return true for success, false for null args, or insertion failure
 bool index_folder(Hashtable *h, const char *foldername);
+
+/// @brief Sorts document record by how often it shows up in file
+/// @param e 
+void sort_by_frequency(IndexEntry *e);
 #endif
+

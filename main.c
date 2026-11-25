@@ -8,6 +8,9 @@ int main(int argc, char *argv[]) {
         printf("Invalid input\n");
         return 1;
     }
+    printf("======================================\n");
+    printf("      Document Search Engine\n");
+    printf("======================================\n");
 
     static Hashtable table = {0};
     if(!index_folder(&table, argv[1])){
@@ -33,7 +36,7 @@ int main(int argc, char *argv[]) {
 
         printf("\n%s: ", result.word);
         for(int i = 0; i < result.doc_count; ++i){
-            printf("%s ", result.documents[i]);
+            printf("%s ", result.record[i].filename);
         }
 
         printf("\n");
