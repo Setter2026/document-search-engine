@@ -24,9 +24,6 @@ int main(int argc, char *argv[]) {
         query[strcspn(query, "\n")] = '\0';
 
         if (strcmp(query, "exit") == 0) break;
-        if (strlen(query) < 0){
-            return 1;
-        }
 
         IndexEntry result;
         if(!search_index(&table, query, &result)){

@@ -4,13 +4,20 @@
 #define TABLE_SIZE 100
 #define ENTRIES_SIZE 100
 #define WORD_SIZE 50
+#define FILENAME_SIZE 256
+#define RECORD_SIZE 100
 
 //TO DO: FIX THE COMMENTS
+
+typedef struct{
+    char filename[FILENAME_SIZE];
+    int frequency;
+}DocumentRecord;
 
 //Stores the word, what documents have that word, and document count
 typedef struct{
     int doc_count;
-    char documents[100][256]; 
+    DocumentRecord record[RECORD_SIZE];
     char word[WORD_SIZE];
 }IndexEntry;
 

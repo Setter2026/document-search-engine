@@ -5,6 +5,20 @@
 #include <dirent.h>
 
 // TODO: Modularize hashing, finding existing entries, creating new entry, etc..
+void sortByFrequency(IndexEntry *e){
+    
+    for(int i = 0; i < e->doc_count; ++i){
+        int most_relevant = i;
+        for(int j = i+1; j < e->record->frequency; ++j){
+             if (e->record[most_relevant].frequency < e->record[j].frequency){
+                most_relevant = j;
+             }
+        }
+        DocumentRecord temp = e->record[i];
+        e->record[i] = e->record[most_relevant];
+        e->record[most_relevant] = temp;
+    }
+}
 
 bool insert_word(const char *word, Hashtable *h, const char *filename){
     if (word == NULL || h == NULL || filename == NULL || strcmp(word, "") == 0){
@@ -54,18 +68,19 @@ bool insert_word(const char *word, Hashtable *h, const char *filename){
         if (strcmp(b->entries[i].word, copy_word) == 0){
             found = true;
             for(int j = 0; j < b->entries[i].doc_count; ++j){
-                if (strcmp(b->entries[i].documents[j], filename) == 0){
+                if (strcmp(b->entries[i].record[j].filename, filename) == 0){
+                    ++b->entries[i].record[j].frequency;
                     existing_word = true;
                     break;
                 }
             }
     
             if (!existing_word){
-                if (b->entries[i].doc_count >= 100 || strlen(filename) >= 256){
+                if (b->entries[i].doc_count >= 100 || strlen(filename) >= FILENAME_SIZE){
                     return false;
                 }
                 ++b->entries[i].doc_count;
-                strcpy(b->entries[i].documents[b->entries[i].doc_count - 1], filename);
+                strcpy(b->entries[i].record[b->entries[i].doc_count - 1].filename, filename);
                 break;
             }
         }
@@ -75,7 +90,7 @@ bool insert_word(const char *word, Hashtable *h, const char *filename){
         IndexEntry e;
         e.doc_count = 1;
         strcpy(e.word, copy_word);
-        strcpy(e.documents[0], filename);
+        strcpy(e.record[0].filename, filename);
         
         ++b->entryCount;
         b->entries[b->entryCount - 1] = e; 
@@ -94,7 +109,7 @@ void print_index(const Hashtable *h){
                 printf("Bucket %d\n", i);
                 printf("     word: %s -> ", h->buckets[i].entries[j].word);
                 for(int k = 0; k < h->buckets[i].entries[j].doc_count; ++k){
-                    printf("%s | ", h->buckets[i].entries[j].documents[k]);
+                    printf("%s | ", h->buckets[i].entries[j].record->filename[0]);
                 }
                 printf("\n");
             }
@@ -180,13 +195,13 @@ bool index_document(Hashtable *h, const char *filename){
 
 }
 
-bool index_documents(Hashtable *h, const char *filenames[], const int file_num){
-    if (h == NULL || filenames == NULL || file_num < 0){
+bool index_documents(Hashtable *h, const char *ilenames[], const int file_num){
+    if (h == NULL || ilenames == NULL || file_num < 0){
         return false;
     }
 
     for(int i = 0; i < file_num; ++i){
-        if (!index_document(h, filenames[i])){
+        if (!index_document(h, ilenames[i])){
             return false;
         }
     }
