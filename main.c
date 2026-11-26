@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
         printf("\nResults for '%s' (%d documents)\n", result.word, result.doc_count);
         for(int i = 0; i < result.doc_count; ++i){
-            printf("\n-%s (%d occurence)", result.record[i].filename, result.record[i].frequency);
+            printf("\n%d. %s (%d occurence)", i+1, result.record[i].filename, result.record[i].frequency);
         }
 
         printf("\n");
